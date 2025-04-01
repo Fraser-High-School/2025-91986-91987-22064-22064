@@ -25,17 +25,44 @@ def Player():
         Card_Suit = str(Player_Cards) +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
 
+#function to give cards to dealers hand
+def Dealer():
+    Dealer_Cards = random.choice(Cards)
+    if Dealer_Cards == 11:
+        Card_Suit = "J" +  random.choice(Suits)
+        Dealer_Deck.append(Card_Suit)
+    if Dealer_Cards == 12:
+        Card_Suit = "Q" +  random.choice(Suits)
+        Dealer_Deck.append(Card_Suit)
+    if Dealer_Cards == 13:
+        Card_Suit = "K" +  random.choice(Suits)
+        Dealer_Deck.append(Card_Suit)
+    if Dealer_Cards == 1:
+        Card_Suit = "A" +  random.choice(Suits)
+        Dealer_Deck.append(Card_Suit)
+    if Dealer_Cards >= 2 and Dealer_Cards <= 10:
+        Card_Suit = str(Dealer_Cards) +  random.choice(Suits)
+        Dealer_Deck.append(Card_Suit)
 
+
+#check for any duplicates
 while len(Player_Deck)<2:
     Player()
     Player_Deck = list(set(Player_Deck))
-    
-    
-        
-        
 
-    
-print(*Player_Deck)
+#check for any duplicates
+while len(Dealer_Deck)<2:
+    Dealer()
+    Dealer_Deck = list(set(Dealer_Deck))
+
+if set(Dealer_Deck) == set(Player_Deck):
+    Dealer()
+else:
+    print(*Dealer_Deck)
+    print(*Player_Deck)
+
+
+
 
 
 
