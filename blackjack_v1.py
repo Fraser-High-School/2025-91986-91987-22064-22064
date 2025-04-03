@@ -44,22 +44,21 @@ def Dealer():
         Card_Suit = str(Dealer_Cards) +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
 
+while True:
+    while len(Player_Deck)<2:
+        Player()
+        Player_Deck = list(set(Player_Deck))
+        continue
+    while len(Dealer_Deck)<2:
+        Dealer()
+        Dealer_Deck = list(set(Dealer_Deck))
+        continue
+    break
 
-#check for any duplicates
-while len(Player_Deck)<2:
-    Player()
-    Player_Deck = list(set(Player_Deck))
+        
 
-#check for any duplicates
-while len(Dealer_Deck)<2:
-    Dealer()
-    Dealer_Deck = list(set(Dealer_Deck))
-
-if set(Dealer_Deck) == set(Player_Deck):
-    Dealer()
-else:
-    print(*Dealer_Deck)
-    print(*Player_Deck)
+print(*Player_Deck)
+print(*Dealer_Deck)
 
 
 
