@@ -45,25 +45,28 @@ def Dealer():
         Dealer_Deck.append(Card_Suit)
 
 while True:
+    #gives the player 2 cards that aren't duplicates
     while len(Player_Deck)<2:
         Player()
         Player_Deck = list(set(Player_Deck))
         continue
+    #gives the dealer 2 cards that aren't duplicates
     while len(Dealer_Deck)<2:
         Dealer()
         Dealer_Deck = list(set(Dealer_Deck))
         continue
-    break
+    
+    #if True there is a duplicate in both hands
+    Deck = bool(set(Player_Deck) & set(Dealer_Deck))
 
+    #clears cards in dealers hand and give them another 2 and repeats until there isn't any duplicates
+    if Deck == True:
+        Dealer_Deck.clear()
+    #breaks the loop since there aren't any duplicate cards
+    elif Deck == False:
+        break
         
 
-print(*Player_Deck)
 print(*Dealer_Deck)
-
-
-
-
-
-
-
+print(*Player_Deck)
 
