@@ -4,6 +4,8 @@ Suits = ["♥", "♦", "♣", "♠"]
 Player_Deck = []
 Dealer_Deck = []
 Chips = 1000
+Player_Value = []
+Dealer_Value = []
 
 #function to give cards to players hand
 def Player():
@@ -13,18 +15,23 @@ def Player():
     if Player_Cards == 11:
         Card_Suit = "J" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
+        Player_Value.append(Player_Cards)
     if Player_Cards == 12:
         Card_Suit = "Q" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
+        Player_Value.append(Player_Cards)
     if Player_Cards == 13:
         Card_Suit = "K" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
+        Player_Value.append(Player_Cards)
     if Player_Cards == 1:
         Card_Suit = "A" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
+        Player_Value.append(Player_Cards)
     if Player_Cards >= 2 and Player_Cards <= 10:
         Card_Suit = str(Player_Cards) +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
+        Player_Value.append(Player_Cards)
 
 #function to give cards to dealers hand
 def Dealer():
@@ -32,18 +39,23 @@ def Dealer():
     if Dealer_Cards == 11:
         Card_Suit = "J" +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
+        Dealer_Value.append(Dealer_Cards)
     if Dealer_Cards == 12:
         Card_Suit = "Q" +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
+        Dealer_Value.append(Dealer_Cards)
     if Dealer_Cards == 13:
         Card_Suit = "K" +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
+        Dealer_Value.append(Dealer_Cards)
     if Dealer_Cards == 1:
         Card_Suit = "A" +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
+        Dealer_Value.append(Dealer_Cards)
     if Dealer_Cards >= 2 and Dealer_Cards <= 10:
         Card_Suit = str(Dealer_Cards) +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
+        Dealer_Value.append(Dealer_Cards)
 
 #function to check if user enters yes (y) or no (n)
 def Yes_No(question):
@@ -52,11 +64,24 @@ def Yes_No(question):
         response = input(question).lower()
 
         if response == "yes" or response == "y":
-            return "yes"
+            return "Yes"
         elif response == "no" or response == "n":
-            return "no"
+            return "No"
         else:
             print("Please enter yes (y) or no (n).\n")
+
+#function to check if user enters hit (h) or stand (s)
+def Hit_Stand(question):
+
+    while True:
+        response = input(question).lower()
+
+        if response == "hit" or response == "h":
+            return "Hit"
+        elif response == "stand" or response == "s":
+            return "Stand"
+        else:
+            print("Please enter hit (h) or stand (s).\n")
 
 
 #while True loop to endlessly make sure there aren't duplicates
@@ -119,17 +144,44 @@ if Instructions == "yes":
 elif Instructions == "no":
     print("")
     
-
+#ask user if they are ready to start
 Start = Yes_No("Are you ready to start?\n")
 if Start == "yes":
-
-
-
+    #gets players bet
     print("")
     print(f"You have ${Chips} in Chips")
-    Bet = int(input("How much would you like to bet? "))
+    Bet = int(input("How much would you like to bet?\n"))
 
     Chips = Chips - Bet
     print("")
     print(f"You bet ${Bet}")
     print(f"Remaining Chips are ${Chips}")
+elif Start == "no":
+    exit
+
+#current game progress
+print("===============================================================")
+print("======================  - Dealer hand -  ======================")
+print(f"======================    - {Dealer_Deck[0]} - ██ -    ======================")
+print("===============================================================")
+print("===============================================================")
+print("======================  - Player hand -  ======================")
+print(f"======================    - {Player_Deck[0]} - {Player_Deck[1]} -    ======================")
+print("===============================================================")
+print("")
+
+#will work on this later
+if Player_Value[0] + Player_Value[1] == 21:
+    print("Congratulations you got Blackjack")
+    exit
+
+Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
+
+if Player_Move == "hit":
+    Player()
+    print(Player_Deck)
+
+
+
+
+
