@@ -64,9 +64,9 @@ def Yes_No(question):
         response = input(question).lower()
 
         if response == "yes" or response == "y":
-            return "Yes"
+            return "yes"
         elif response == "no" or response == "n":
-            return "No"
+            return "no"
         else:
             print("Please enter yes (y) or no (n).\n")
 
@@ -77,9 +77,9 @@ def Hit_Stand(question):
         response = input(question).lower()
 
         if response == "hit" or response == "h":
-            return "Hit"
+            return "hit"
         elif response == "stand" or response == "s":
-            return "Stand"
+            return "stand"
         else:
             print("Please enter hit (h) or stand (s).\n")
 
@@ -156,8 +156,10 @@ if Start == "yes":
     print("")
     print(f"You bet ${Bet}")
     print(f"Remaining Chips are ${Chips}")
-elif Start == "no":
-    exit
+else:
+    print("Player again when you're ready")
+    exit()
+
 
 #current game progress
 print("===============================================================")
@@ -173,13 +175,24 @@ print("")
 #will work on this later
 if Player_Value[0] + Player_Value[1] == 21:
     print("Congratulations you got Blackjack")
-    exit
+    exit()
 
 Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
 
 if Player_Move == "hit":
     Player()
-    print(Player_Deck)
+    Player()
+    Player()
+    Player()
+    Player()
+    Player()
+    Player()
+    Player()
+    Player()
+    Player()
+    Player()
+    print(*Player_Deck)
+
 
 
 
