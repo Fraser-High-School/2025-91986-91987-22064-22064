@@ -15,19 +15,18 @@ def Player():
     if Player_Cards == 11:
         Card_Suit = "J" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
-        Player_Value.append(Player_Cards)
+        Player_Value.append(10)
     if Player_Cards == 12:
         Card_Suit = "Q" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
-        Player_Value.append(Player_Cards)
+        Player_Value.append(10)
     if Player_Cards == 13:
         Card_Suit = "K" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
-        Player_Value.append(Player_Cards)
+        Player_Value.append(10)
     if Player_Cards == 1:
         Card_Suit = "A" +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
-        Player_Value.append(Player_Cards)
     if Player_Cards >= 2 and Player_Cards <= 10:
         Card_Suit = str(Player_Cards) +  random.choice(Suits)
         Player_Deck.append(Card_Suit)
@@ -51,7 +50,6 @@ def Dealer():
     if Dealer_Cards == 1:
         Card_Suit = "A" +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
-        Dealer_Value.append(Dealer_Cards)
     if Dealer_Cards >= 2 and Dealer_Cards <= 10:
         Card_Suit = str(Dealer_Cards) +  random.choice(Suits)
         Dealer_Deck.append(Card_Suit)
@@ -82,6 +80,19 @@ def Hit_Stand(question):
             return "stand"
         else:
             print("Please enter hit (h) or stand (s).\n")
+
+#function to check if user enters 1 or 11 for the Ace
+def Ace_Value(question):
+
+    while True:
+        response = input(question).lower()
+
+        if response == "11":
+            return "11"
+        elif response == "1":
+            return "1"
+        else:
+            print("Please enter 1 or 11.\n")
 
 
 #while True loop to endlessly make sure there aren't duplicates
@@ -157,41 +168,79 @@ if Start == "yes":
     print(f"You bet ${Bet}")
     print(f"Remaining Chips are ${Chips}")
 else:
-    print("Player again when you're ready")
+    print("Play again when you're ready")
     exit()
 
 
 #current game progress
-print("===============================================================")
-print("======================  - Dealer hand -  ======================")
-print(f"======================    - {Dealer_Deck[0]} - ██ -    ======================")
-print("===============================================================")
-print("===============================================================")
-print("======================  - Player hand -  ======================")
-print(f"======================    - {Player_Deck[0]} - {Player_Deck[1]} -    ======================")
-print("===============================================================")
+print("=============================")
+print("Dealer hand -")
+print(f"{Dealer_Deck[0]} ██")
+print("=============================")
+print("Player hand -")
+print(*Player_Deck)
+print("=============================")
 print("")
 
-#will work on this later
-if Player_Value[0] + Player_Value[1] == 21:
-    print("Congratulations you got Blackjack")
-    exit()
 
-Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
 
-if Player_Move == "hit":
-    Player()
-    Player()
-    Player()
-    Player()
-    Player()
-    Player()
-    Player()
-    Player()
-    Player()
-    Player()
-    Player()
-    print(*Player_Deck)
+while "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
+    Ace = Ace_Value("Would you like the Ace to equal 1 or 11?\n")
+    if Ace == "11":
+        Player_Value.append(11)
+        break
+    elif Ace == "1":
+        Player_Value.append(1)
+        break
+
+while True:
+    if sum(Player_Value) < 21:
+        break
+    elif Player_Value[0] + Player_Value[1] == 21:
+        print("Congratulations you got Blackjack")
+        
+
+
+while True:
+    while len(Player_Deck)<3:
+        Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
+        if Player_Move == "hit":
+            Player()
+            print(*Player_Deck)
+            if sum(Player_Value) > 21:
+                print(f"You Lose\nYour Hand value was {Player_Value}")
+                exit
+            elif sum(Player_Value)< 21:
+                continue
+        elif Player_Move == "stand":
+            print(*Player_Deck)
+            break
+    if Player_Move == "stand":
+        break
+    elif Player_Move == "hit":
+        continue
+
+    while len(Player_Deck)<4:
+        Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
+        if Player_Move == "hit":
+            Player()
+            print(*Player_Deck)
+            if sum(Player_Value) > 21:
+                print(f"You Lose\nYour Hand value was {Player_Value}")
+                exit
+        elif Player_Move == "stand":
+            print(*Player_Deck)
+            break
+    if Player_Move == "stand":
+        break
+
+
+
+print(Player_Deck)
+
+
+
+
 
 
 
