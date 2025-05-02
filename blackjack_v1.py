@@ -1,6 +1,8 @@
 import random
-Cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-Suits = ["♥", "♦", "♣", "♠"]
+Cards = ["A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
+         "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
+         "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
+         "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠"]
 Player_Deck = []
 Dealer_Deck = []
 Chips = 1000
@@ -12,48 +14,49 @@ def Player():
     
     #randomises the cards
     Player_Cards = random.choice(Cards)
-    if Player_Cards == 11:
-        Card_Suit = "J" +  random.choice(Suits)
-        Player_Deck.append(Card_Suit)
+    if Player_Cards[:-1] == "J":
+        Player_Deck.append(Player_Cards)
         Player_Value.append(10)
-    if Player_Cards == 12:
-        Card_Suit = "Q" +  random.choice(Suits)
-        Player_Deck.append(Card_Suit)
+        Cards.remove(Player_Cards)
+    if Player_Cards[:-1] == "Q":
+        Player_Deck.append(Player_Cards)
         Player_Value.append(10)
-    if Player_Cards == 13:
-        Card_Suit = "K" +  random.choice(Suits)
-        Player_Deck.append(Card_Suit)
+        Cards.remove(Player_Cards)
+    if Player_Cards[:-1] == "K":
+        Player_Deck.append(Player_Cards)
         Player_Value.append(10)
-    if Player_Cards == 1:
-        Card_Suit = "A" +  random.choice(Suits)
-        Player_Deck.append(Card_Suit)
-    if Player_Cards >= 2 and Player_Cards <= 10:
-        Card_Suit = str(Player_Cards) +  random.choice(Suits)
-        Player_Deck.append(Card_Suit)
-        Player_Value.append(Player_Cards)
+        Cards.remove(Player_Cards)
+    if Player_Cards[:-1] == "A":
+        Player_Deck.append(Player_Cards)
+        Player_Value.append(10)
+        Cards.remove(Player_Cards)
+    if Player_Cards[:-1] >=2 and Player_Cards[:-1] <=10:
+        Player_Deck.append(Player_Cards)
+        Player_Value.append(Player_Cards[:-1])
 
 #function to give cards to dealers hand
 def Dealer():
     Dealer_Cards = random.choice(Cards)
-    if Dealer_Cards == 11:
-        Card_Suit = "J" +  random.choice(Suits)
-        Dealer_Deck.append(Card_Suit)
-        Dealer_Value.append(Dealer_Cards)
-    if Dealer_Cards == 12:
-        Card_Suit = "Q" +  random.choice(Suits)
-        Dealer_Deck.append(Card_Suit)
-        Dealer_Value.append(Dealer_Cards)
-    if Dealer_Cards == 13:
-        Card_Suit = "K" +  random.choice(Suits)
-        Dealer_Deck.append(Card_Suit)
-        Dealer_Value.append(Dealer_Cards)
-    if Dealer_Cards == 1:
-        Card_Suit = "A" +  random.choice(Suits)
-        Dealer_Deck.append(Card_Suit)
-    if Dealer_Cards >= 2 and Dealer_Cards <= 10:
-        Card_Suit = str(Dealer_Cards) +  random.choice(Suits)
-        Dealer_Deck.append(Card_Suit)
-        Dealer_Value.append(Dealer_Cards)
+    if Dealer_Cards[:-1] == "J":
+        Dealer_Deck.append(Dealer_Cards)
+        Dealer_Value.append(10)
+        Cards.remove(Dealer_Cards)
+    if Dealer_Cards[:-1] == "Q":
+        Dealer_Deck.append(Dealer_Cards)
+        Dealer_Value.append(10)
+        Cards.remove(Dealer_Cards)
+    if Dealer_Cards[:-1] == "K":
+        Dealer_Deck.append(Dealer_Cards)
+        Dealer_Value.append(10)
+        Cards.remove(Dealer_Cards)
+    if Dealer_Cards[:-1] == "A":
+        Dealer_Deck.append(Dealer_Cards)
+        Dealer_Value.append(10)
+        Cards.remove(Dealer_Cards)
+    if Dealer_Cards[:-1] >=2 and Dealer_Cards[:-1] <=10:
+        Dealer_Deck.append(Dealer_Cards)
+        Dealer_Value.append(Dealer_Cards[:-1])
+
 
 #function to check if user enters yes (y) or no (n)
 def Yes_No(question):
@@ -95,35 +98,9 @@ def Ace_Value(question):
             print("Please enter 1 or 11.\n")
 
 
-#while True loop to endlessly make sure there aren't duplicates
-while True:
-    #gives the player 2 cards that aren't duplicates
-    while len(Player_Deck)<2:
-        Player()
-        Player_Deck = list(set(Player_Deck))
-        continue
-    #gives the dealer 2 cards that aren't duplicates
-    while len(Dealer_Deck)<2:
-        Dealer()
-        Dealer_Deck = list(set(Dealer_Deck))
-        continue
-    
-    #if True there is a duplicate in both hands
-    Deck = bool(set(Player_Deck) & set(Dealer_Deck))
-
-    #clears cards in dealers hand and give them another 2 and repeats until there isn't any duplicates
-    if Deck == True:
-        Dealer_Deck.clear()
-    #breaks the loop since there aren't any duplicate cards
-    elif Deck == False:
-        break
-
-
 print("===============================================================")
 print("====================Welcome to Blackjack 21====================")
-print("===============================================================")
-print("")
-
+print("===============================================================\n")
 
 
 Instructions = Yes_No("Would you like to know the rules of Blackjack 21?\n")
@@ -183,60 +160,61 @@ print("=============================")
 print("")
 
 
-
-while "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
-    Ace = Ace_Value("Would you like the Ace to equal 1 or 11?\n")
-    if Ace == "11":
-        Player_Value.append(11)
-        break
-    elif Ace == "1":
-        Player_Value.append(1)
-        break
-
 while True:
-    if sum(Player_Value) < 21:
-        break
-    elif Player_Value[0] + Player_Value[1] == 21:
+
+    
+
+    while "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
+        Ace = Ace_Value("Would you like the Ace to equal 1 or 11?\n")  
+        if Ace == "11" and sum(Player_Value) >=11:
+            print("Sorry you can't choose 11 because you will bust.")
+        elif Ace == "11" and sum(Player_Value) <=10:
+            Player_Value.append(11)
+            break
+        elif Ace == "1" and sum(Player_Value) <=20:
+            Player_Value.append(1)
+            break
+
+    
+    if sum(Player_Value) == 21:
         print("Congratulations you got Blackjack")
-        
-
-
-while True:
-    while len(Player_Deck)<3:
+    
+            
+    if sum(Player_Value) < 21:
         Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
         if Player_Move == "hit":
             Player()
             print(*Player_Deck)
-            if sum(Player_Value) > 21:
-                print(f"You Lose\nYour Hand value was {Player_Value}")
-                exit
-            elif sum(Player_Value)< 21:
-                continue
         elif Player_Move == "stand":
-            print(*Player_Deck)
-            break
-    if Player_Move == "stand":
-        break
-    elif Player_Move == "hit":
-        continue
+            if Dealer_Value <=16:
+                Dealer
+            print(Dealer_Deck)
+            print(Dealer_Value)
+            
+    
+    
 
-    while len(Player_Deck)<4:
-        Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
-        if Player_Move == "hit":
-            Player()
-            print(*Player_Deck)
-            if sum(Player_Value) > 21:
-                print(f"You Lose\nYour Hand value was {Player_Value}")
-                exit
-        elif Player_Move == "stand":
-            print(*Player_Deck)
-            break
-    if Player_Move == "stand":
-        break
+    if sum(Player_Value) > 21:
+        print(f"You busted!\nYou have ${Chips} remaining.")
+        exit()
 
 
 
-print(Player_Deck)
+        #elif sum(Player_Value)< 21:
+            #continue
+    #elif Player_Move == "stand":
+        #print(*Player_Deck)
+        #break
+
+
+
+
+#if sum(Player_Value) > 21:
+            #print(f"You Lose\nYour Hand value was {Player_Value}")
+            #exit
+
+
+#print(Player_Deck)
 
 
 
