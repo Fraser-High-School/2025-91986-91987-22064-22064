@@ -14,48 +14,40 @@ def Player():
     
     #randomises the cards
     Player_Cards = random.choice(Cards)
+    Cards.remove(Player_Cards)
     if Player_Cards[:-1] == "J":
         Player_Deck.append(Player_Cards)
         Player_Value.append(10)
-        Cards.remove(Player_Cards)
     if Player_Cards[:-1] == "Q":
         Player_Deck.append(Player_Cards)
         Player_Value.append(10)
-        Cards.remove(Player_Cards)
     if Player_Cards[:-1] == "K":
         Player_Deck.append(Player_Cards)
         Player_Value.append(10)
-        Cards.remove(Player_Cards)
     if Player_Cards[:-1] == "A":
         Player_Deck.append(Player_Cards)
-        Player_Value.append(10)
-        Cards.remove(Player_Cards)
-    if Player_Cards[:-1] >=2 and Player_Cards[:-1] <=10:
+    if Player_Cards[:-1] == "2" or Player_Cards[:-1] == "3" or Player_Cards[:-1] == "4" or Player_Cards[:-1] == "5" or Player_Cards[:-1] == "6" or Player_Cards[:-1] == "7" or Player_Cards[:-1] == "8" or Player_Cards[:-1] == "9" or Player_Cards[:-1] == "10":
         Player_Deck.append(Player_Cards)
-        Player_Value.append(Player_Cards[:-1])
+        Player_Value.append(int(Player_Cards[:-1]))
 
 #function to give cards to dealers hand
 def Dealer():
     Dealer_Cards = random.choice(Cards)
+    Cards.remove(Dealer_Cards)
     if Dealer_Cards[:-1] == "J":
         Dealer_Deck.append(Dealer_Cards)
         Dealer_Value.append(10)
-        Cards.remove(Dealer_Cards)
     if Dealer_Cards[:-1] == "Q":
         Dealer_Deck.append(Dealer_Cards)
         Dealer_Value.append(10)
-        Cards.remove(Dealer_Cards)
     if Dealer_Cards[:-1] == "K":
         Dealer_Deck.append(Dealer_Cards)
         Dealer_Value.append(10)
-        Cards.remove(Dealer_Cards)
     if Dealer_Cards[:-1] == "A":
         Dealer_Deck.append(Dealer_Cards)
-        Dealer_Value.append(10)
-        Cards.remove(Dealer_Cards)
-    if Dealer_Cards[:-1] >=2 and Dealer_Cards[:-1] <=10:
+    if Dealer_Cards[:-1] == "2" or Dealer_Cards[:-1] == "3" or Dealer_Cards[:-1] == "4" or Dealer_Cards[:-1] == "5" or Dealer_Cards[:-1] == "6" or Dealer_Cards[:-1] == "7" or Dealer_Cards[:-1] == "8" or Dealer_Cards[:-1] == "9" or Dealer_Cards[:-1] == "10":
         Dealer_Deck.append(Dealer_Cards)
-        Dealer_Value.append(Dealer_Cards[:-1])
+        Dealer_Value.append(int(Dealer_Cards[:-1]))
 
 
 #function to check if user enters yes (y) or no (n)
@@ -132,71 +124,90 @@ if Instructions == "yes":
 elif Instructions == "no":
     print("")
     
-#ask user if they are ready to start
-Start = Yes_No("Are you ready to start?\n")
-if Start == "yes":
-    #gets players bet
-    print("")
-    print(f"You have ${Chips} in Chips")
-    Bet = int(input("How much would you like to bet?\n"))
-
-    Chips = Chips - Bet
-    print("")
-    print(f"You bet ${Bet}")
-    print(f"Remaining Chips are ${Chips}")
-else:
-    print("Play again when you're ready")
-    exit()
-
-
-#current game progress
-print("=============================")
-print("Dealer hand -")
-print(f"{Dealer_Deck[0]} ██")
-print("=============================")
-print("Player hand -")
-print(*Player_Deck)
-print("=============================")
-print("")
-
 
 while True:
+    #ask user if they are ready to start
+    Start = Yes_No("Are you ready to start?\n")
+    if Start == "yes":
+        #gets players bet
+        print("")
+        print(f"You have ${Chips} in Chips")
+        Bet = int(input("How much would you like to bet?\n"))
 
-    
-
-    while "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
-        Ace = Ace_Value("Would you like the Ace to equal 1 or 11?\n")  
-        if Ace == "11" and sum(Player_Value) >=11:
-            print("Sorry you can't choose 11 because you will bust.")
-        elif Ace == "11" and sum(Player_Value) <=10:
-            Player_Value.append(11)
-            break
-        elif Ace == "1" and sum(Player_Value) <=20:
-            Player_Value.append(1)
-            break
-
-    
-    if sum(Player_Value) == 21:
-        print("Congratulations you got Blackjack")
-    
-            
-    if sum(Player_Value) < 21:
-        Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
-        if Player_Move == "hit":
+        Chips = Chips - Bet
+        print("")
+        print(f"You bet ${Bet}")
+        print(f"Remaining Chips are ${Chips}")
+        for card in range(2):
             Player()
-            print(*Player_Deck)
-        elif Player_Move == "stand":
-            if Dealer_Value <=16:
-                Dealer
-            print(Dealer_Deck)
-            print(Dealer_Value)
-            
-    
-    
+            Dealer()
+    else:
+        print("Play again when you're ready")
+        break
 
-    if sum(Player_Value) > 21:
-        print(f"You busted!\nYou have ${Chips} remaining.")
-        exit()
+
+    while len(Dealer_Deck)<3:
+        #current game progress
+        print("=============================")
+        print("Dealer hand -")
+        print(f"{Dealer_Deck[0]} ██")
+        print("=============================")
+        print("Player hand -")
+        print(*Player_Deck)
+        print("=============================")
+        print("")
+        break
+
+    while True:
+        while "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
+            Ace = Ace_Value("Would you like the Ace to equal 1 or 11?\n")  
+            if Ace == "11" and sum(Player_Value) >=11:
+                print("Sorry you can't choose 11 because you will bust.")
+            elif Ace == "11" and sum(Player_Value) <=10:
+                Player_Value.append(11)
+                break
+            elif Ace == "1" and sum(Player_Value) <=20:
+                Player_Value.append(1)
+                break
+            else:
+                break
+
+        
+        if sum(Player_Value) == 21:
+            print("Congratulations you got Blackjack")
+            break
+                
+        if sum(Player_Value) < 21:
+            Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
+            if Player_Move == "hit":
+                Player()
+                print("=============================")
+                print("Dealer hand -")
+                print(f"{Dealer_Deck[0]} ██")
+                print("=============================")
+                print("Player hand -")
+                print(*Player_Deck)
+                print("=============================\n")
+            elif Player_Move == "stand":
+                while sum(Dealer_Value) <=16:
+                    Dealer()
+                    print("=============================")
+                    print("Dealer hand -")
+                    print(*Dealer_Deck)
+                    print("=============================")
+                    print("Player hand -")
+                    print(*Player_Deck)
+                    print("=============================\n")
+                if sum(Dealer_Value) >=21:
+                    print(f"Dealer busted!\nYou Win!")
+                    break
+                
+        
+        
+
+        if sum(Player_Value) > 21:
+            print(f"You busted!\nYou have ${Chips} remaining.")
+            break
 
 
 
