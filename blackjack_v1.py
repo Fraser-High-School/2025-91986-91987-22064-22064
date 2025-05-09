@@ -9,6 +9,7 @@ Dealer_Deck = []
 Chips = 1000
 Player_Value = []
 Dealer_Value = []
+Ace = []
 
 #function to give cards to players hand
 def Player():
@@ -28,6 +29,7 @@ def Player():
         Player_Value.append(10)
     if Player_Cards[:-1] == "A":
         Player_Deck.append(Player_Cards)
+        Ace.append(Player_Cards)
     if Player_Cards[:-1] == "2" or Player_Cards[:-1] == "3" or Player_Cards[:-1] == "4" or Player_Cards[:-1] == "5" or Player_Cards[:-1] == "6" or Player_Cards[:-1] == "7" or Player_Cards[:-1] == "8" or Player_Cards[:-1] == "9" or Player_Cards[:-1] == "10":
         Player_Deck.append(Player_Cards)
         Player_Value.append(int(Player_Cards[:-1]))
@@ -48,6 +50,7 @@ def Dealer():
         Dealer_Value.append(10)
     if Dealer_Cards[:-1] == "A":
         Dealer_Deck.append(Dealer_Cards)
+        Ace.append(Dealer_Cards)
     if Dealer_Cards[:-1] == "2" or Dealer_Cards[:-1] == "3" or Dealer_Cards[:-1] == "4" or Dealer_Cards[:-1] == "5" or Dealer_Cards[:-1] == "6" or Dealer_Cards[:-1] == "7" or Dealer_Cards[:-1] == "8" or Dealer_Cards[:-1] == "9" or Dealer_Cards[:-1] == "10":
         Dealer_Deck.append(Dealer_Cards)
         Dealer_Value.append(int(Dealer_Cards[:-1]))
@@ -92,6 +95,28 @@ def Ace_Value(question):
         else:
             print("Please enter 1 or 11.\n")
 
+def Restart():
+    Player_Deck.clear()
+    Dealer_Deck.clear()
+    Player_Value.clear()
+    Dealer_Value.clear()
+    
+    for cards in range(len(Removed_Cards)):
+        Cards.insert(0,Removed_Cards[0])
+        Removed_Cards.remove(Removed_Cards[0])
+
+def Bet_Amount(question):
+    
+    while True:
+        
+        try:
+            response = int(input(question))
+            if response <= Chips:
+                return response
+            elif response >= Chips:
+                print("You don't have that much chips.\n")
+        except(ValueError):
+            print("Please enter a valid number.\n")
 
 print("===============================================================")
 print("====================Welcome to Blackjack 21====================")
@@ -131,11 +156,12 @@ elif Instructions == "no":
 while True:
     #ask user if they are ready to start
     Start = Yes_No("Are you ready to start?\n")
+
     if Start == "yes":
         #gets players bet
         print("")
         print(f"You have ${Chips} in Chips")
-        Bet = int(input("How much would you like to bet?\n"))
+        Bet = Bet_Amount("How much would you like to bet?\n")
 
         Chips = Chips - Bet
         print("")
@@ -164,34 +190,56 @@ while True:
         break
 
     while True:
-        if "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
-            Ace = Ace_Value("Would you like the Ace to equal 1 or 11?\n")  
-            if Ace == "11" and sum(Player_Value) >=11:
-                print("Sorry you can't choose 11 because you will bust.")
-            elif Ace == "11" and sum(Player_Value) <=10:
-                Player_Value.append(11)
-                break
-            elif Ace == "1" and sum(Player_Value) <=20:
-                Player_Value.append(1)
-                break
-            else:
-                break
+        while "A♥" in Ace or "A♦" in Ace or "A♣" in Ace or "A♠" in Ace:
+            Ace.clear()
+            if "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
+                
+                Ace = Ace_Value("Would you like the Ace to equal 1 or 11?\n")  
+                if Ace == "11" and sum(Player_Value) >=11:
+                    print("Sorry you can't choose 11 because you will bust.")
+                elif Ace == "11" and sum(Player_Value) <=10:
+                    Player_Value.append(11)
+                    print("=============================")
+                    print("Dealer hand -")
+                    print(f"{Dealer_Deck[0]} ██")
+                    print(f"{Dealer_Value[0]}")
+                    print("=============================")
+                    print("Player hand -")
+                    print(*Player_Deck)
+                    print(sum(Player_Value))
+                    print("=============================\n")
+                    break
+                elif Ace == "1" and sum(Player_Value) <=20:
+                    Player_Value.append(1)
+                    print("=============================")
+                    print("Dealer hand -")
+                    print(f"{Dealer_Deck[0]} ██")
+                    print(f"{Dealer_Value[0]}")
+                    print("=============================")
+                    print("Player hand -")
+                    print(*Player_Deck)
+                    print(sum(Player_Value))
+                    print("=============================\n")
+                    break
+                else:
+                    print("Sorry you must enter 1 or 11.")
 
-        if "A♥" in Dealer_Deck or "A♦" in Dealer_Deck or "A♣" in Dealer_Deck or "A♠" in Dealer_Deck:
-            if sum(Dealer_Value) <=10:
-                Dealer_Value.append(11)
-                break
-            elif sum(Dealer_Value) >=11:
-                Dealer_Value.append(1)
-                break
+            if "A♥" in Dealer_Deck or "A♦" in Dealer_Deck or "A♣" in Dealer_Deck or "A♠" in Dealer_Deck:
+                if sum(Dealer_Value) <=10:
+                    Dealer_Value.append(11)
+                    break
+                elif sum(Dealer_Value) >=11:
+                    Dealer_Value.append(1)
+                    break
 
-        
+            
         if sum(Player_Value) == 21 and len(Player_Deck) == 2:
+            Chips = Chips + Bet + Bet*1.5
             print("Congratulations you got Blackjack")
+            Restart()
             break
 
-        
-                
+            
         if sum(Player_Value) < 21:
             Player_Move = Hit_Stand("Would you like to Hit or Stand?\n")
             if Player_Move == "hit":
@@ -206,7 +254,7 @@ while True:
                 print(sum(Player_Value))
                 print("=============================\n")
 
-            elif Player_Move == "stand":
+            elif Player_Move == "stand" or sum(Player_Value) == 21:
                 while sum(Dealer_Value) <=16:
                     Dealer()
                     print("=============================")
@@ -218,48 +266,47 @@ while True:
                     print(*Player_Deck)
                     print(sum(Player_Value))
                     print("=============================\n")
+                if sum(Dealer_Value) > 16 and len(Dealer_Deck) == 2:
+                    print("=============================")
+                    print("Dealer hand -")
+                    print(*Dealer_Deck)
+                    print(sum(Dealer_Value))
+                    print("=============================")
+                    print("Player hand -")
+                    print(*Player_Deck)
+                    print(sum(Player_Value))
+                    print("=============================\n")
                 if sum(Dealer_Value) > sum(Player_Value) and sum(Dealer_Value) <=21:
                     print(f"You Lose!\nYou have ${Chips} remaining.")
-                    
-                if sum(Dealer_Value) >=21:
-                    print(f"Dealer busted!\nYou Win!")
+                    Restart()
                     break
-
-        if sum(Player_Value) == 21 and len(Player_Deck) >= 3:
-            if sum(Dealer_Value) == sum(Player_Value):
-                Chips = Chips + Bet
-                print(f"It's a Tie!\nYou have ${Chips} remaining.")
-        
-        if sum(Dealer_Value) > sum(Player_Value) and sum(Dealer_Value) <=21:
-            print(f"You Lose! The Dealer had a higher hand.\nYou have ${Chips} remaining.")
-
-        if sum(Player_Value) > 21:
-            print(f"You busted!\nYou have ${Chips} remaining.")
-            break
-
-        
-
-
-
-        #elif sum(Player_Value)< 21:
-            #continue
-    #elif Player_Move == "stand":
-        #print(*Player_Deck)
-        #break
-
-
-
-
-#if sum(Player_Value) > 21:
-            #print(f"You Lose\nYour Hand value was {Player_Value}")
-            #exit
-
-
-#print(Player_Deck)
-
-
-
-
+                if sum(Dealer_Value) >=21:
+                    Chips = Chips + Bet*2
+                    print(f"Dealer busted!\nYou Win!\nYou have ${Chips} remaining.")
+                    Restart()
+                    break
+                if sum(Dealer_Value) == sum(Player_Value):
+                    Chips = Chips + Bet
+                    print(f"It's a Tie!\nYou have ${Chips} remaining.")
+                    Restart()
+                    break
+                if sum(Dealer_Value) > sum(Player_Value) and sum(Dealer_Value) <=21:
+                    print(f"You Lose! The Dealer had a higher hand.\nYou have ${Chips} remaining.")
+                    Restart()
+                    break
+                if sum(Player_Value) == 21 and len(Player_Deck) >= 3 and sum(Dealer_Value) == sum(Player_Value):
+                    Chips = Chips + Bet
+                    print(f"It's a Tie!\nYou have ${Chips} remaining.")
+                    Restart()
+                    break
+        elif sum(Player_Value) > 21:
+                print(f"You busted!\nYou have ${Chips} remaining.")
+                Restart()
+                break
+    if Chips == 0:
+        print("Well Done!\nYou have lost all your chips by gambling.\n\n")
+        exit()
+            
 
 
 
