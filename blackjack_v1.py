@@ -89,17 +89,21 @@ def Hit_Stand(question):
             time.sleep(0.4)
 
 
-def Ace_Value(question):
-    """Corrects any other responses apart from 11 or 1."""
+def Bet_Amount(question):
+    """Corrects any other values apart from ones the player can bet."""
     while True:
-        response = input(question).lower()
 
-        if response == "11":
-            return "11"
-        elif response == "1":
-            return "1"
-        else:
-            print("Please enter 1 or 11.\n")
+        try:
+            response = int(input(question))
+            if response <= Chips and response >= 1:
+                return response
+            elif response >= Chips:
+                print("You don't have that much chips.\n")
+                time.sleep(0.4)
+            elif response <= 0:
+                print("Please enter a valid number.\n")
+        except(ValueError):
+            print("Please enter a valid number.\n")
             time.sleep(0.4)
 
 
@@ -117,21 +121,21 @@ def Restart():
         Removed_Cards.remove(Removed_Cards[0])
 
 
-def Bet_Amount(question):
-    """Corrects any other values apart from ones the player can bet."""
-    while True:
-
-        try:
-            response = int(input(question))
-            if response <= Chips:
-                return response
-            elif response >= Chips:
-                print("You don't have that much chips.\n")
-                time.sleep(0.4)
-        except(ValueError):
-            print("Please enter a valid number.\n")
-            time.sleep(0.4)
-
+def Ace():
+    if "A" in Dealer_Ace:
+        Dealer_Ace.remove(Dealer_Ace[0])
+        if "A♥" in Dealer_Deck or "A♦" in Dealer_Deck or "A♣" in Dealer_Deck or "A♠" in Dealer_Deck:
+            if sum(Dealer_Value) <= 10:
+                Dealer_Value.append(11)
+            elif sum(Dealer_Value) >= 11:
+                Dealer_Value.append(1)
+    elif "A" in Player_Ace:
+        Player_Ace.remove(Player_Ace[0])
+        if "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
+            if sum(Player_Value) <= 10:
+                Player_Value.append(11)
+            elif sum(Player_Value) >= 11:
+                Player_Value.append(1)
 
 print("===============================================================")
 print("====================Welcome to Blackjack 21====================")
@@ -198,75 +202,33 @@ while True:
         # gives the dealer and player 2 cards to start
         for card in range(2):
             Player()
+            Ace()
             Dealer()
-        if "A" not in Dealer_Ace and "A" not in Player_Ace:
-            print("Dealer hand -")
-            time.sleep(0.4)
-            print(f"{Dealer_Deck[0]} ██")
-            time.sleep(0.4)
-            print(Dealer_Value[0])
-            time.sleep(0.4)
-            print("Player hand -")
-            time.sleep(0.4)
-            print(*Player_Deck)
-            time.sleep(0.4)
-            print(sum(Player_Value))
-            time.sleep(0.4)
-            print("")
-            time.sleep(0.4)
+            Ace()
+        print("Dealer hand -")
+        time.sleep(0.4)
+        print(f"{Dealer_Deck[0]} ██")
+        time.sleep(0.4)
+        print(Dealer_Value[0])
+        time.sleep(0.4)
+        print("Player hand -")
+        time.sleep(0.4)
+        print(*Player_Deck)
+        time.sleep(0.4)
+        print(sum(Player_Value))
+        time.sleep(0.4)
+        print("")
+        time.sleep(0.4)
     else:
         print("Play again when you're ready")
         time.sleep(0.4)
         break
 
-    # while true to loop the current game
     while True:
-        while "A" in Dealer_Ace:
-            Dealer_Ace.remove(Dealer_Ace[0])
-            if "A♥" in Dealer_Deck or "A♦" in Dealer_Deck or "A♣" in Dealer_Deck or "A♠" in Dealer_Deck:
-                if sum(Dealer_Value) <= 10:
-                    Dealer_Value.append(11)
-                elif sum(Dealer_Value) >= 11:
-                    Dealer_Value.append(1)
-                print("Dealer hand -")
-                time.sleep(0.4)
-                print(f"{Dealer_Deck[0]} ██")
-                time.sleep(0.4)
-                print(Dealer_Value[1])
-                time.sleep(0.4)
-                print("Player hand -")
-                time.sleep(0.4)
-                print(*Player_Deck)
-                time.sleep(0.4)
-                print(sum(Player_Value))
-                time.sleep(0.4)
-                print("")
-                time.sleep(0.4)
-        while "A" in Player_Ace:
-            Player_Ace.remove(Player_Ace[0])
-            if "A♥" in Player_Deck or "A♦" in Player_Deck or "A♣" in Player_Deck or "A♠" in Player_Deck:
-                if sum(Player_Value) <= 10:
-                    Player_Value.append(11)
-                elif sum(Player_Value) >= 11:
-                    Player_Value.append(1)
-                print("Dealer hand -")
-                time.sleep(0.4)
-                print(f"{Dealer_Deck[0]} ██")
-                time.sleep(0.4)
-                print(Dealer_Value[1])
-                time.sleep(0.4)
-                print("Player hand -")
-                time.sleep(0.4)
-                print(*Player_Deck)
-                time.sleep(0.4)
-                print(sum(Player_Value))
-                time.sleep(0.4)
-                print("")
-                time.sleep(0.4)
-
         # checks for blackjack
         if sum(Player_Value) == 21 and len(Player_Deck) == 2:
             Chips = Chips + Bet + Bet*(3/2)
+            Chips = int(Chips)
             print(f"Congratulations you got Blackjack\nYou have ${Chips} remaining.")
             time.sleep(0.4)
             Win.append(1)
@@ -281,12 +243,34 @@ while True:
             # if player hit it will add another card
             if Player_Move == "hit":
                 Player()
-                if "A" not in Player_Ace and "A" not in Dealer_Ace:
+                Ace()
+                print("Dealer hand -")
+                time.sleep(0.4)
+                print(f"{Dealer_Deck[0]} ██")
+                time.sleep(0.4)
+                print(f"{Dealer_Value[0]}")
+                time.sleep(0.4)
+                print("Player hand -")
+                time.sleep(0.4)
+                print(*Player_Deck)
+                time.sleep(0.4)
+                print(sum(Player_Value))
+                time.sleep(0.4)
+                print("")
+                time.sleep(0.4)
+            # if player stand it will move on to dealer value
+            if Player_Move == "stand" or sum(Player_Value) == 21:
+                # while dealer value less than or equal to 16 it will add another card to dealer
+                while sum(Dealer_Value) <= 16:
+                    if sum(Dealer_Value) > sum(Player_Value):
+                        break
+                    Dealer()
+                    Ace()
                     print("Dealer hand -")
                     time.sleep(0.4)
-                    print(f"{Dealer_Deck[0]} ██")
+                    print(*Dealer_Deck)
                     time.sleep(0.4)
-                    print(f"{Dealer_Value[0]}")
+                    print(sum(Dealer_Value))
                     time.sleep(0.4)
                     print("Player hand -")
                     time.sleep(0.4)
@@ -296,99 +280,74 @@ while True:
                     time.sleep(0.4)
                     print("")
                     time.sleep(0.4)
-            # if player stand it will move on to dealer value
-            if Player_Move == "stand" or sum(Player_Value) == 21:
-                # while dealer value less than or equal to 16 it will add another card to dealer
-                while sum(Dealer_Value) <= 16 and "A" not in Dealer_Ace and "A" not in Player_Ace:
-                    if sum(Dealer_Value) > sum(Player_Value):
-                        break
-                    Dealer()
-                    if "A" not in Dealer_Ace and "A" not in Player_Ace:
-                        print("Dealer hand -")
-                        time.sleep(0.4)
-                        print(*Dealer_Deck)
-                        time.sleep(0.4)
-                        print(sum(Dealer_Value))
-                        time.sleep(0.4)
-                        print("Player hand -")
-                        time.sleep(0.4)
-                        print(*Player_Deck)
-                        time.sleep(0.4)
-                        print(sum(Player_Value))
-                        time.sleep(0.4)
-                        print("")
-                        time.sleep(0.4)
-                    elif "A" in Dealer_Ace or "A" in Player_Ace:
-                        break
-                if "A" not in Dealer_Ace and "A" not in Player_Ace:
-                    # if dealer value greater than 16 it will show the second dealer card
-                    if sum(Dealer_Value) > 16 and len(Dealer_Deck) == 2 and sum(Player_Value) <= 21:
-                        print("Dealer hand -")
-                        time.sleep(0.4)
-                        print(*Dealer_Deck)
-                        time.sleep(0.4)
-                        print(sum(Dealer_Value))
-                        time.sleep(0.4)
-                        print("Player hand -")
-                        time.sleep(0.4)
-                        print(*Player_Deck)
-                        time.sleep(0.4)
-                        print(sum(Player_Value))
-                        time.sleep(0.4)
-                        print("")
-                        time.sleep(0.4)
-                    # if player greater than dealer while player not busting the player wins
-                    if sum(Player_Value) > sum(Dealer_Value) and sum(Player_Value) <= 21:
-                        Chips = Chips + Bet*2
-                        print(f"You Win!\nThe Player had a higher hand.\nYou have ${Chips} remaining.")
-                        time.sleep(0.4)
-                        Win.append(1)
-                        Restart()
-                        break
-                    # if dealer busts the player wins
-                    if sum(Dealer_Value) > 21:
-                        Chips = Chips + Bet*2
-                        print(f"Dealer busted!\nYou Win!\nYou have ${Chips} remaining.")
-                        time.sleep(0.4)
-                        Win.append(1)
-                        Restart()
-                        break
-                    # if dealer and player equal each other its a tie
-                    if sum(Dealer_Value) == sum(Player_Value):
-                        Chips = Chips + Bet
-                        print(f"It's a Tie!\nYou have ${Chips} remaining.")
-                        time.sleep(0.4)
-                        Restart()
-                        break
-                    # if dealer greater than player while dealer not busting the dealer wins
-                    if sum(Dealer_Value) > sum(Player_Value) and sum(Dealer_Value) <= 21:
-                        print(f"You Lose!\nThe Dealer had a higher hand.\nYou have ${Chips} remaining.")
-                        time.sleep(0.4)
-                        Loss.append(1)
-                        Restart()
-                        break
-                    # if player = 21 and dealer doesn't = player the player wins
-                    if sum(Player_Value) == 21 and len(Player_Deck) >= 3 and sum(Dealer_Value) != sum(Player_Value):
-                        Chips = Chips + Bet*2
-                        print(f"You Win!\nThe Player had a higher hand.\nYou have ${Chips} remaining.")
-                        time.sleep(0.4)
-                        Win.append(1)
-                        Restart()
-                        break
-                    # if player = 21 and dealer does = player it's a tie
-                    if sum(Player_Value) == 21 and len(Player_Deck) >= 3 and sum(Dealer_Value) == sum(Player_Value):
-                        Chips = Chips + Bet
-                        print(f"It's a Tie!\nYou have ${Chips} remaining.")
-                        time.sleep(0.4)
-                        Restart()
-                        break
+                # if dealer value greater than 16 it will show the second dealer card
+                if sum(Dealer_Value) > 16 and len(Dealer_Deck) == 2 and sum(Player_Value) <= 21:
+                    print("Dealer hand -")
+                    time.sleep(0.4)
+                    print(*Dealer_Deck)
+                    time.sleep(0.4)
+                    print(sum(Dealer_Value))
+                    time.sleep(0.4)
+                    print("Player hand -")
+                    time.sleep(0.4)
+                    print(*Player_Deck)
+                    time.sleep(0.4)
+                    print(sum(Player_Value))
+                    time.sleep(0.4)
+                    print("")
+                    time.sleep(0.4)
+                # if player greater than dealer while player not busting the player wins
+                if sum(Player_Value) > sum(Dealer_Value) and sum(Player_Value) <= 21:
+                    Chips = Chips + Bet*2
+                    print(f"You Win!\nThe Player had a higher hand.\nYou have ${Chips} remaining.")
+                    time.sleep(0.4)
+                    Win.append(1)
+                    Restart()
+                    break
+                # if dealer busts the player wins
+                if sum(Dealer_Value) > 21:
+                    Chips = Chips + Bet*2
+                    print(f"Dealer busted!\nYou Win!\nYou have ${Chips} remaining.")
+                    time.sleep(0.4)
+                    Win.append(1)
+                    Restart()
+                    break
+                # if dealer and player equal each other its a tie
+                if sum(Dealer_Value) == sum(Player_Value):
+                    Chips = Chips + Bet
+                    print(f"It's a Tie!\nYou have ${Chips} remaining.")
+                    time.sleep(0.4)
+                    Restart()
+                    break
+                # if dealer greater than player while dealer not busting the dealer wins
+                if sum(Dealer_Value) > sum(Player_Value) and sum(Dealer_Value) <= 21:
+                    print(f"You Lose!\nThe Dealer had a higher hand.\nYou have ${Chips} remaining.")
+                    time.sleep(0.4)
+                    Loss.append(1)
+                    Restart()
+                    break
+                # if player = 21 and dealer doesn't = player the player wins
+                if sum(Player_Value) == 21 and len(Player_Deck) >= 3 and sum(Dealer_Value) != sum(Player_Value):
+                    Chips = Chips + Bet*2
+                    print(f"You Win!\nThe Player had a higher hand.\nYou have ${Chips} remaining.")
+                    time.sleep(0.4)
+                    Win.append(1)
+                    Restart()
+                    break
+                # if player = 21 and dealer does = player it's a tie
+                if sum(Player_Value) == 21 and len(Player_Deck) >= 3 and sum(Dealer_Value) == sum(Player_Value):
+                    Chips = Chips + Bet
+                    print(f"It's a Tie!\nYou have ${Chips} remaining.")
+                    time.sleep(0.4)
+                    Restart()
+                    break
         # checks if player busts
         if sum(Player_Value) > 21:
-                print(f"You busted!\nYou have ${Chips} remaining.")
-                time.sleep(0.4)
-                Loss.append(1)
-                Restart()
-                break
+            print(f"You busted!\nYou have ${Chips} remaining.")
+            time.sleep(0.4)
+            Loss.append(1)
+            Restart()
+            break
     # if user runs out of chips the game will end
     if Chips == 0:
         print("Well Done!\nYou have lost all your chips by gambling.\n")
